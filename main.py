@@ -35,20 +35,22 @@ def import_property(address, price, link):
     driver.quit()
 
 
+# ACCESS TO WEBSITE
 headers = {
     'Accept-Language': 'en-US,en;q=0.9,vi;q=0.8',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 }
 response = requests.get(RENTAL_LIST_LINK, headers=headers)
-
 soup = BeautifulSoup(response.text, "lxml")
 
+# TAKE DATA FROM WEBSITE TO LIST
 price_data = soup.find_all("p", class_="property-pricing")
 address_data = soup.find_all("div", class_="property-address js-url")
 link_data = soup.find_all("a", class_="property-link")
 
 new_link = [link_data[n]['href'] for n in range(len(link_data)) if link_data[n]['href'] != link_data[n-1]['href']]
 
+# PUSH DATA TO GOOGLE FORM
 for n in range(len(price_data)):
     price = price_data[n].get_text()
     address = address_data[n].get_text()
